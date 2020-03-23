@@ -1,0 +1,6 @@
+select 
+
+rli,count(time)
+
+ from (select date_format(date_add('2020-03-07',interval -t.help_topic_id day),'%Y-%m-%d') as 'rli'  
+from mysql.help_topic t where t.help_topic_id<=10 ) b LEFT JOIN a on b.rli=date_format(time,'%Y-%m-%d') GROUP BY rli desc

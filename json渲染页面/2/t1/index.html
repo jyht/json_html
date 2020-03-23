@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>iframe+postMessage 跨域通信 主页面</title>
+</head>
+<body>
+<form id="moodleform" target="iframe" method="post" action="http://www.t2.com/1.php" >
+    <input type="hidden" name="username" value="guest"/>
+    <input type="hidden" name="password" value="gueasst"/>
+    <input type="hidden" name="testcookies" value="1"/>
+</form>
+<iframe name="iframe"></iframe>
+<script type="text/javascript">
+    document.getElementById('moodleform').submit();
+</script>
+
+
+</body>
+</html>

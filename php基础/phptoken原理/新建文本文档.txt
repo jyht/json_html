@@ -1,0 +1,4 @@
+token 原理 是数据表里有token字段和 过期时间
+
+
+appid 和server 过期时间  加密生成token

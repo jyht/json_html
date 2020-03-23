@@ -1,0 +1,35 @@
+ffmpeg -re -i 1.mp4 -vcodec libx264 -acodec aac -f flv rtmp://127.0.0.1:1935/live/home
+
+ffmpeg -i 1.mp4 -vcodec libx264 -preset ultrafast -b:v 2000k output.mp4
+
+nginx.exe -c conf\nginx-win-rtmp.conf
+
+
+https://www.cnblogs.com/Leesttee/p/8193389.html
+
+https://blog.csdn.net/qq_32381727/article/details/81078213
+
+
+
+https://blog.csdn.net/lihaitao_1/article/details/47950121
+json 要穿数组 变json 
+取出数据库的数据
+ function get_message($sendid,$accessid)
+  {
+    $arr = '';
+    mysql_select_db('newymj',$this->db);
+    $sql = "select * from ymz_sendmsg limit 1,10";
+    $res = mysql_query($sql);
+    while($row = mysql_fetch_assoc($res))
+    {
+      $arr .= json_encode($row).'*';//<span style="font-size:18px;color:#FF6666;">转换json数据</span>
+    }
+    return $arr;
+
+
+前台代码
+
+ws.onmessage = function(e){
+      var message =JSON.parse(e.data);
+      alert(e.data);
+    }

@@ -1,0 +1,53 @@
+http://archive.apache.org/dist/lucene/java/3.3.0/
+
+
+
+
+$tf = new Java('TestLucene.TxtFileIndexer');
+
+
+
+$data_path = "F:/test/php_lucene/htdocs/data/manual"; //定义被索引内容的目录 
+$index_path = "F:/test/php_lucene/htdocs/data/search"; //定义生成的索引文件存放目录 
+$s = $tf->createIndex($index_path,$data_path); //调用Java类的方法 
+print $s; //打印返回的结果
+
+D:\lucene-5.2.0\analysis\common\lucene-analyzers-common-5.2.0.jar;D:\lucene-5.2.0\demo\lucene-demo-5.2.0.jar;D:\lucene-5.2.0\core\lucene-core-5.2.0.jar;D:\lucene-5.2.0\queryparser\lucene-queryparser-5.2.0.jar;
+
+
+php-java-bridge_3.0.8_j2ee.zip
+
+
+C:\Program Files\Java\jre6\lib\ext  classpath 放jar包
+
+
+
+lucene-core-3.0.2.jar【Lucene核心】
+lucene-analyzers-3.0.2.jar【分词器】
+lucene-highlighter-3.0.2.jar【Lucene会将搜索出来的字，高亮显示，提示用户】
+lucene-memory-3.0.2.jar【索引库优化策略】
+
+
+jdk 需要1.7  Paths只能是1.7 1.8报错
+
+
+
+
+
+
+
+
+
+import java.io.IOException;
+import java.nio.file.Paths;
+
+
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+import org.apache.lucene.document.TextField;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.FSDirectory;

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+		 <meta charset="UTF-8">
+		 <title>ajax请求json数据</title>
+</head>
+<div id="test"></div>
+<script src="jquery.min.js"></script>
+<script>
+		
+$(function(){
+  $("#btn").click(function(){
+	var token = "data.json?token="+Math.round(new Date().getTime()/1000);
+    $.getJSON(token,function(data){
+      var $jsontip = $("#jsonTip");
+      var strHtml = "";//存储数据的变量
+      $.each(data,function(infoIndex,info){
+        strHtml += "姓名："+info["name"]+"<br>";
+        
+        
+        strHtml += "<hr>"
+      })
+      $jsontip.html(strHtml);//显示处理后的数据
+    })
+  })
+})
+	</script>
+	<div id="jsonTip"> </div>
+	
+	<input type="button" value="获取数据" id="btn"/>
+	</body>
+	</html>

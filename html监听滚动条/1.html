@@ -1,0 +1,29 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>autoScroll</title>
+</head>
+<style>
+    #aa {
+        width: 300px;
+        height: 2300px;
+        margin: 0 auto;
+        background: #242424;
+}
+</style>
+<body>
+    <div id="aa">
+
+    </div>
+    <script type="text/javascript">
+window.onscroll = function() {
+  //为了保证兼容性，这里取两个值，哪个有值取哪一个
+  //scrollTop就是触发滚轮事件时滚轮的高度
+  var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+  //console.log("滚动距离" + scrollTop);
+}
+    </script>
+</body>
+</html>

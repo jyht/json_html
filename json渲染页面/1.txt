@@ -1,0 +1,9 @@
+git reset --hard 59772e4834a0477e5063697f6dacdb63991c542c
+
+
+把修改推到远程服务器
+git push -f -u origin master  
+
+
+重新更新
+git pull
