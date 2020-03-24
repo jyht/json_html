@@ -11,6 +11,7 @@ import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
@@ -20,6 +21,7 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import java.util.ArrayList;
 
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.sql.*;
 import java.util.ArrayList;
@@ -137,41 +139,64 @@ public class jyht {
   
     }
     
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, ParseException {
 		
-        String result = "";
-        try {
-        	Analyzer a = new StandardAnalyzer();
-           Directory dir = FSDirectory.open(Paths.get("./index"));
-           IndexReader reader = DirectoryReader.open(dir);
-           IndexSearcher is = new IndexSearcher(reader);
-           QueryParser parser = new QueryParser("title", a);
-           Query query = parser.parse("弟弟");
-           TopDocs topDocs = is.search(query, 15);
-           ScoreDoc[] hits = topDocs.scoreDocs;
-           
-           ArrayList<UserInfo> studentList = new ArrayList<UserInfo>();
-           int start = 0 ;
-           int end = 15;
-           
-           for (int i=start;i<end;i++) {
-               //System.out.println("匹配得分：" + scoreDoc.score);
-               //System.out.println("文档索引ID：" + scoreDoc.doc);
-           	Document doc = reader.document(hits[i].doc);
-               //System.out.println(document.get("id")+"---"+document.get("title"));
-               studentList.add(new UserInfo(doc.get("id"),doc.get("title")));
-               //users.add(document.get("title"));
-           }
-           JSONArray jsonarray = JSONArray.fromObject(studentList);
-           reader.close();
-           dir.close();
-           String str = ""+jsonarray; //转换string类型
-           System.out.println(str);
-        } catch (Exception e) {
-        	System.out.println(e.getMessage());
+    	Analyzer a = new StandardAnalyzer();
+        Directory dir = FSDirectory.open(Paths.get("./index"));
+        IndexReader reader = DirectoryReader.open(dir);
+        IndexSearcher is = new IndexSearcher(reader);
+        QueryParser parser = new QueryParser("title", a);
+        Query query = parser.parse("姐姐a");
+        TopDocs topDocs = is.search(query, 15);
+        //System.out.println("总共匹配多少个：" + topDocs.totalHits);
+        ScoreDoc[] hits = topDocs.scoreDocs;
+        // 应该与topDocs.totalHits相同
+        //System.out.println("多少条数据：" + hits.length);
+        ArrayList<UserInfo> studentList = new ArrayList<UserInfo>();
+        for (ScoreDoc scoreDoc : hits) {
+            //System.out.println("匹配得分：" + scoreDoc.score);
+            //System.out.println("文档索引ID：" + scoreDoc.doc);
+            Document document = is.doc(scoreDoc.doc);
+            studentList.add(new UserInfo(document.get("id"),document.get("title")));
+            //System.out.println(document.get("id")+"-1--"+document.get("title"));
         }
+        JSONArray jsonarray = JSONArray.fromObject(studentList);
+        String str = ""+jsonarray; //转换string类型
+        System.out.println(str);
+        reader.close();
+        dir.close();
         
  
-   }    
+   }
+    
+    public String select(String key) throws IOException, ParseException {
+    	Analyzer a = new StandardAnalyzer();
+        Directory dir = FSDirectory.open(Paths.get("./index"));
+        IndexReader reader = DirectoryReader.open(dir);
+        IndexSearcher is = new IndexSearcher(reader);
+        QueryParser parser = new QueryParser("title", a);
+        Query query = parser.parse(key);
+        TopDocs topDocs = is.search(query, 15);
+        //System.out.println("总共匹配多少个：" + topDocs.totalHits);
+        ScoreDoc[] hits = topDocs.scoreDocs;
+        // 应该与topDocs.totalHits相同
+        //System.out.println("多少条数据：" + hits.length);
+        ArrayList<UserInfo> studentList = new ArrayList<UserInfo>();
+        for (ScoreDoc scoreDoc : hits) {
+            //System.out.println("匹配得分：" + scoreDoc.score);
+            //System.out.println("文档索引ID：" + scoreDoc.doc);
+            Document document = is.doc(scoreDoc.doc);
+            studentList.add(new UserInfo(document.get("id"),document.get("title")));
+            //System.out.println(document.get("id")+"-1--"+document.get("title"));
+        }
+        JSONArray jsonarray = JSONArray.fromObject(studentList);
+        String str = ""+jsonarray; //转换string类型
+        reader.close();
+        dir.close();
+        return str;
+    }    
+    
+    
+    
     
 }
