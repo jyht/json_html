@@ -22,23 +22,25 @@ while($row = mysqli_fetch_array($dsa))
 	//$string = "as</br>12村已堵，\n路已封，\n为了安全躲家中。[傲慢]\n新肺炎，\n扩散快，\n严防死守这一带。[拳头]\n一人染，\n全家病，\n严重起来真要命！";
 	//24行 读取数据库字段的就无法解析 json 会转义变成\\n
 	$string = $str=stripcslashes($row['content']);  //  \\n新肺炎，\\n扩散
-	$zhyyao =array('title'=>'das','content'=>'dsadsa');
+	$zhyyao =array('title'=>'das','content'=>"阿斯达 打算我额 \n");
 	//$zhyyao = addslashes($zhyyao);
-	$asd = json_encode($zhyyao);
-	$arr = array('pid'=>''.$row['pid'],'content'=>$asd);
+	$asd = json_encode($zhyyao,JSON_UNESCAPED_UNICODE);
+	$arr = array('pid'=>''.$row['pid'],'content'=>"$asd");
 }
 
 
 
 
 
-$array = array("Eric",23);
         $data=[
             'status'=>200,
             'msg'=>'ok',
 			'body'=>$arr
         ];
-
-echo json_encode($data,JSON_UNESCAPED_UNICODE);
-//echo json_encode("[\n]").PHP_EOL; 
+$str="this is a test \\n";
+$str=str_replace('', "", $str);
+echo $str;die();
+$hou = json_encode($data,JSON_UNESCAPED_UNICODE);
+$hou=str_replace('', "", $str);
+echo $hou; die();
 ?>
