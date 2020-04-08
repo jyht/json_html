@@ -37,10 +37,8 @@ while($row = mysqli_fetch_array($dsa))
             'msg'=>'ok',
 			'body'=>$arr
         ];
-$str="this is a test \\n";
-$str=str_replace('', "", $str);
-echo $str;die();
-$hou = json_encode($data,JSON_UNESCAPED_UNICODE);
-$hou=str_replace('', "", $str);
-echo $hou; die();
+//$str="this is a test \\n";
+
+$a = str_replace('\\\\', '\\', json_encode($data,JSON_UNESCAPED_UNICODE));
+echo $a;
 ?>
