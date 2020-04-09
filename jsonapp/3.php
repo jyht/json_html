@@ -22,7 +22,7 @@ function http_request($url, $data = null)
 }
 
 
-$res = http_request('http://39.106.164.101/tt/getPostList.php','category=friend&subType=0&pageNumber=1');
+$res = http_request('http://39.106.164.101/tt/getPostList.php','category=sy&subType=0&pageNumber=1');
 
 print_r($res);
 
