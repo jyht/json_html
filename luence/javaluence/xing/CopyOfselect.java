@@ -1,4 +1,4 @@
-package page;
+package xing;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -17,15 +17,15 @@ import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
-public class a {
+public class CopyOfselect {
 
     public static void main(String[] args) throws IOException, ParseException {
     	Analyzer a = new StandardAnalyzer();
         Directory dir = FSDirectory.open(Paths.get("./xing"));
         IndexReader reader = DirectoryReader.open(dir);
         IndexSearcher is = new IndexSearcher(reader);
-        QueryParser parser = new QueryParser("name", a);
-        Query query = parser.parse("亦非");
+        QueryParser parser = new QueryParser("name_py", a);
+        Query query = parser.parse("ly*");
         TopDocs topDocs = is.search(query, 15);
         //System.out.println("总共匹配多少个：" + topDocs.totalHits);
         ScoreDoc[] hits = topDocs.scoreDocs;

@@ -25,7 +25,7 @@ public class Second {
         IndexReader reader = DirectoryReader.open(dir);
         IndexSearcher is = new IndexSearcher(reader);
         QueryParser parser = new QueryParser("title", a);
-        Query query = parser.parse("补习");
+        Query query = parser.parse("钱静");
         TopDocs topDocs = is.search(query, 10);
         //System.out.println("总共匹配多少个：" + topDocs.totalHits);
         ScoreDoc[] hits = topDocs.scoreDocs;
