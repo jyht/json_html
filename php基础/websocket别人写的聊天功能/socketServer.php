@@ -25,20 +25,20 @@ class socketServer
     {
         try {
             //创建socket套接字
-            $sock = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
+            $this->_master = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
             // 设置IP和端口重用,在重启服务器后能重新使用此端口;
-            socket_set_option($sock, SOL_SOCKET, SO_REUSEADDR, 1);
+            socket_set_option($this->_master, SOL_SOCKET, SO_REUSEADDR, 1);
             //绑定地址与端口
-            socket_bind($sock, $this->_ip, $this->_port);
+            socket_bind($this->_master, $this->_ip, $this->_port);
             //listen函数使用主动连接套接口变为被连接套接口，使得一个进程可以接受其它进程的请求，从而成为一个服务器进程。在TCP服务器编程中listen函数把进程变为一个服务器，并指定相应的套接字变为被动连接,其中的能存储的请求不明的socket数目。
-            socket_listen($sock, self::LISTEN_SOCKET_NUM);
+            socket_listen($this->_master, self::LISTEN_SOCKET_NUM);
         } catch (Exception $e) {
             $this->debug(array("code: " . $e->getCode() . ", message: " . $e->getMessage()));
         }
         //将socket保存到socket池中
-        $this->_socketPool[0] = array('resource' => $sock);
+        $this->_socketPool[0] = array('resource' => $this->_master);
         $pid = getmypid();
-        $this->debug(array("server: {$sock} started,pid: {$pid}"));
+        $this->debug(array("server: {$this->_master} started,pid: {$pid}"));
         while (true) {
             try {
                 $this->run();
@@ -58,8 +58,8 @@ class socketServer
             return;
         }
         foreach ($sockets as $socket) {
-            if ($socket == $sock) {
-                $client = socket_accept($sock);
+            if ($socket == $this->_master) {
+                $client = socket_accept($this->_master);
                 if ($client === false) {
                     $this->debug(['socket_accept_error', $err_code = socket_last_error(), socket_strerror($err_code)]);
                     continue;
@@ -100,7 +100,7 @@ class socketServer
     private function broadcast($data)
     {
         foreach ($this->_socketPool as $socket) {
-            if ($socket['resource'] == $sock) {
+            if ($socket['resource'] == $this->_master) {
                 continue;
             }
             socket_write($socket['resource'], $data, strlen($data));
