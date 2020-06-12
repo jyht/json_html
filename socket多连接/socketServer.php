@@ -20,17 +20,9 @@ $port = 1935;
  */
 
 /*----------------    以下操作都是手册上的    -------------------*/
-if(($sock = socket_create(AF_INET,SOCK_STREAM,SOL_TCP)) < 0) {
-    echo "socket_create() 失败的原因是:".socket_strerror($sock)."\n";
-}
-
-if(($ret = socket_bind($sock,$ip,$port)) < 0) {
-    echo "socket_bind() 失败的原因是:".socket_strerror($ret)."\n";
-}
-
-if(($ret = socket_listen($sock,4)) < 0) {
-    echo "socket_listen() 失败的原因是:".socket_strerror($ret)."\n";
-}
+$sock = socket_create(AF_INET,SOCK_STREAM,SOL_TCP);
+$ret = socket_bind($sock,$ip,$port);
+$ret = socket_listen($sock,4);
 
 $count = 0;
 
@@ -41,13 +33,12 @@ do {
     } else {
 
         //发到客户端
-        $msg ="jyht";
         socket_write($msgsock, $msg, strlen($msg));
 
         $buf = socket_read($msgsock,8192);
 
 
-        $talkback = "收到的信息:$buf\n";
+        $talkback = "lai:$buf\n";
         echo $talkback;
 
         if(++$count >= 5){

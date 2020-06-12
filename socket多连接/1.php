@@ -22,17 +22,12 @@ $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
 if ($socket < 0) {
     echo "socket_create() failed: reason: " . socket_strerror($socket) . "\n";
 }else {
-    echo "创建成功<br>";
+    echo "OK.\n";
 }
 
 $result = socket_connect($socket, $ip, $port);
-if ($result < 0) {
-    echo "socket_connect() failed.\nReason: ($result) " . socket_strerror($result) . "\n";
-}else {
-    echo "连接成功<br>";
-}
 
-$in = "啊啊a";
+$in = "aanas";
 $out = '';
 
 if(!socket_write($socket, $in, strlen($in))) {
@@ -46,5 +41,9 @@ while($out = socket_read($socket, 8192)) {
     echo "接收服务器回传信息成功！\n";
     echo "接受的内容为:",$out;
 }
+
+
+echo "关闭SOCKET...\n";
 socket_close($socket);
+echo "关闭OK\n";
 ?>
