@@ -53,10 +53,6 @@ class socketServer
         $write = $except = NULL;
         $sockets = array_column($this->_socketPool, 'resource');
         $read_num = socket_select($sockets, $write, $except, NULL);
-        if (false === $read_num) {
-            $this->debug(array('socket_select_error', $err_code = socket_last_error(), socket_strerror($err_code)));
-            return;
-        }
         foreach ($sockets as $socket) {
             if ($socket == $this->_master) {
                 $client = socket_accept($this->_master);
