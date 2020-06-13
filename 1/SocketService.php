@@ -1,61 +1,59 @@
+@@ -1,140 +0,0 @@
 <?php
 $host = '127.0.0.1';
 $port = '9000';
 $null = NULL;
 
-//åˆ›å»ºtcp socket
+//´´½¨tcp socket
 $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
 socket_set_option($socket, SOL_SOCKET, SO_REUSEADDR, 1);
 socket_bind($socket, 0, $port);
 
-//ç›‘å¬ç«¯å£
+//¼àÌı¶Ë¿Ú
 socket_listen($socket);
 
-//è¿æ¥çš„client socket åˆ—è¡¨
+//Á¬½ÓµÄclient socket ÁĞ±í
 $clients = array($socket);
 
-//è®¾ç½®ä¸€ä¸ªæ­»å¾ªç¯,ç”¨æ¥ç›‘å¬è¿æ¥ ,çŠ¶æ€
+//ÉèÖÃÒ»¸öËÀÑ­»·,ÓÃÀ´¼àÌıÁ¬½Ó ,×´Ì¬
 while (true) {
 
     $changed = $clients;
     socket_select($changed, $null, $null, 0, 10);
 
-    //å¦‚æœæœ‰æ–°çš„è¿æ¥
+    //Èç¹ûÓĞĞÂµÄÁ¬½Ó
     if (in_array($socket, $changed)) {
-        //æ¥å—å¹¶åŠ å…¥æ–°çš„socketè¿æ¥
+        //½ÓÊÜ²¢¼ÓÈëĞÂµÄsocketÁ¬½Ó
         $socket_new = socket_accept($socket);
         $clients[] = $socket_new;
 
-        //é€šè¿‡socketè·å–æ•°æ®æ‰§è¡Œhandshake
+        //Í¨¹ısocket»ñÈ¡Êı¾İÖ´ĞĞhandshake
         $header = socket_read($socket_new, 1024);
         perform_handshaking($header, $socket_new, $host, $port);
 
-        //è·å–client ip ç¼–ç jsonæ•°æ®,å¹¶å‘é€é€šçŸ¥
+        //»ñÈ¡client ip ±àÂëjsonÊı¾İ,²¢·¢ËÍÍ¨Öª
         socket_getpeername($socket_new, $ip);
-        $response = mask(json_encode(array('type' => 'system', 'message' => $ip . ' connected')));
-        send_message($response);
+        //$response = mask(json_encode(array('type' => 'system', 'message' => $ip . ' connected')));
+        //-send_message($response);
         $found_socket = array_search($socket, $changed);
         unset($changed[$found_socket]);
     }
 
-    //è½®è¯¢ æ¯ä¸ªclient socket è¿æ¥
+    //ÂÖÑ¯ Ã¿¸öclient socket Á¬½Ó
     foreach ($changed as $changed_socket) {
 
-        //å¦‚æœæœ‰clientæ•°æ®å‘é€è¿‡æ¥
+        //Èç¹ûÓĞclientÊı¾İ·¢ËÍ¹ıÀ´
         while (socket_recv($changed_socket, $buf, 1024, 0) >= 1) {
-            //è§£ç å‘é€è¿‡æ¥çš„æ•°æ®
+            //½âÂë·¢ËÍ¹ıÀ´µÄÊı¾İ
             $received_text = unmask($buf);
-            $tst_msg = json_decode($received_text);
-            $user_name = $tst_msg->name;
-            $user_message = $tst_msg->message;
 
-            //æŠŠæ¶ˆæ¯å‘é€å›æ‰€æœ‰è¿æ¥çš„ client ä¸Šå»
-            $response_text = mask(json_encode(array('type' => 'usermsg', 'name' => $user_name, 'message' => $user_message)));
+            //°ÑÏûÏ¢·¢ËÍ»ØËùÓĞÁ¬½ÓµÄ client ÉÏÈ¥
+            $response_text = mask($received_text);
             send_message($response_text);
             break 2;
         }
 
-        //æ£€æŸ¥offlineçš„client
+        //¼ì²éofflineµÄclient
         $buf = @socket_read($changed_socket, 1024, PHP_NORMAL_READ);
         if ($buf === false) {
             $found_socket = array_search($changed_socket, $clients);
@@ -66,10 +64,10 @@ while (true) {
         }
     }
 }
-// å…³é—­ç›‘å¬çš„socket
+// ¹Ø±Õ¼àÌıµÄsocket
 socket_close($sock);
 
-//å‘é€æ¶ˆæ¯çš„æ–¹æ³•
+//·¢ËÍÏûÏ¢µÄ·½·¨
 function send_message($msg)
 {
     global $clients;
@@ -80,7 +78,7 @@ function send_message($msg)
 }
 
 
-//è§£ç æ•°æ®
+//½âÂëÊı¾İ
 function unmask($text)
 {
     $length = ord($text[1]) & 127;
@@ -101,7 +99,7 @@ function unmask($text)
     return $text;
 }
 
-//ç¼–ç æ•°æ®
+//±àÂëÊı¾İ
 function mask($text)
 {
     $b1 = 0x80 | (0x1 & 0x0f);
@@ -116,7 +114,7 @@ function mask($text)
     return $header . $text;
 }
 
-//æ¡æ‰‹çš„é€»è¾‘
+//ÎÕÊÖµÄÂß¼­
 function perform_handshaking($receved_header, $client_conn, $host, $port)
 {
     $headers = array();
