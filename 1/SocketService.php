@@ -138,5 +138,3 @@ function perform_handshaking($receved_header, $client_conn, $host, $port)
         "Sec-WebSocket-Accept:$secAccept\r\n\r\n";
     socket_write($client_conn, $upgrade, strlen($upgrade));
 }
-
-?>
