@@ -31,7 +31,10 @@ while (true) {
         $header = socket_read($socket_new, 1024);
         perform_handshaking($header, $socket_new, $host, $port);
 
-        //编码json数据,并发送通知
+        //获取client ip 编码json数据,并发送通知
+        socket_getpeername($socket_new, $ip);
+        //$response = mask(json_encode(array('type' => 'system', 'message' => $ip . ' connected')));
+        //-send_message($response);
         $found_socket = array_search($socket, $changed);
         unset($changed[$found_socket]);
     }
