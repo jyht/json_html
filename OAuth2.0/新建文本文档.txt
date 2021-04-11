@@ -1,0 +1,8 @@
+https://github.com/liaoshengping/oauth2-php
+
+我使用了php来开发oauth2，使用最传统的授权码模式，自身理解一个完整的oauth2分为三步
+1.访问指定链接获取授权码code
+2.用code等一大堆数据向服务端爬access_token.
+3.用access_token等向服务端爬被保护的数据
+目前现状:看了oauth2官方的英文文档，按照文档上的代码片段拼接成一个简单的服务端。发现如下三个问题
+1.第一步的回调url.只能是具体的url.
