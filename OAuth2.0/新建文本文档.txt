@@ -6,3 +6,38 @@ https://github.com/liaoshengping/oauth2-php
 3.用access_token等向服务端爬被保护的数据
 目前现状:看了oauth2官方的英文文档，按照文档上的代码片段拼接成一个简单的服务端。发现如下三个问题
 1.第一步的回调url.只能是具体的url.
+
+
+OAuth认证
+OAuth认证是为了做到第三方应用在未获取到用户敏感信息（如：账号密码、用户PIN等）的情况下，能让用户授权予他来访问开放平台（主要访问平台中的资源服务器Resource Server）中的资源接口。
+
+其流程主要是：
+* 1.用户首先要保持登录，即已认证通过的状态
+* 2.第三方应用请求用户授权（我理解是弹出一个显示的操作界面让用户确认给第三方授权）
+* 3.用户授权成功之后会向Authorization Server（认证服务器）请求“授权码”（指authorization_code而不是最终的access_token），请求中还会携带redirect_uri（跳转至第三方应用的链接）
+* 4.获得“授权码”之后用户所在的浏览器网页将跳转到redirect_uri（即第三方应用）
+* 5.第三方应用携带“授权码”和应用认证信息（client_id & client_secret）到Authorization Server换取access_token
+* 6.第三方应用就可以在访问开放平台时带上access_token
+
+SSO单点登录
+单点登录是指用户在某个应用系统上登录之后，进入其子应用或相关应用系统可以免去登录步骤，从而实现一次登录，到处操作。这次项目我所负责的正好是单点登录功能模块，所以来更新下实际项目中SSO的实现流程，我们要实现的效果是，现在有业务服务器a.com和b.com，还有SSO服务器sso.com，在a.com上完成登录操作之后访问b.com时是已登录状态。
+* 1.用户首次访问a.com/user时，到a.com服务器获取不到session
+* 2.给用户弹出一个SSO的登录页面sso.com/login.html，这个页面会带上两个参数，分别是开发者平台映射值key（即某个业务服务器在SSO所映射的key）和回调地址redirect（即登录成功之后跳转到的url，一般是所发起业务服务器开放的路由）
+* 3.用户输入账号密码之后到SSO服务器上进行身份校验，若校验成功则给用户生成一个ticket，并将该ticket值及用户基本信息一起创建SSO服务器session
+* 4.选择某种加密方式对该请求的session进行加密之后生成一个token值，然后在回调地址redirect里带上token参数并跳转回去a.com服务器。
+* 5.a.com对token参数进行解析后拿到用户基本信息和ticket值，相应地初始化本地session并将ticket值也记录下来。
+* 6.用户再次访问a.com/user或其他页面的时候，到a.com上获取session并到sso.com上校验ticket值得有效性，两个操作都成功之后才返回用户信息；若校验ticket值失败，则重新要求用户进行登录操作，即从步骤1开始。
+* 7.现在用户在a.com上的登录和访问流程已完成，那这时用户访问b.com/user，到b.com上获取不到session，则会重定向到sso.com/session，因为之前a.com已在sso.com上登录过，故请求sso.com/session的时候SSO服务器能将session中用户信息和ticket值返回给b.com。
+* 8.b.com获取到用户信息和ticket值之后和a.com做相同的事情即可，这样就完成了单点登录的整个流程。
+
+SSO单点登出
+单点登出则是指用户只要在a.com服务器上进行登出操作，则在其他业务服务器如b.com上也应处于未登录状态，单点登录流程的步骤6中提到每次用户访问业务服务器路由检验用户当前状态时不仅仅查找本地有没有session，还要到SSO服务器上校验ticket值的有效性，所以只要有一个业务服务器登出时令ticket失效即可。
+* 1.现在用户是登录状态，他从a.com进行了退出操作，则自然a.com已将其session清除。
+* 2.a.com服务器同时还要携带ticket值发请求到sso.com将对应的记录清除。
+* 3.当访问某个b.com某个页面时，虽然在b.com服务器上获取到session，此外还需要到SSO服务器上校验一遍ticket值，而发现ticket值校验失败，则会提示用户当前处于未登录状态。
+* 4.这样相当于b.com也已经是退出登录，完成了单点登出的整个流程
+
+第二章.OAuth2.0更为具体的解释
+————————————————
+版权声明：本文为CSDN博主「remote_roamer」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
+原文链接：https://blog.csdn.net/remote_roamer/article/details/53902495
