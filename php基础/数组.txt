@@ -1,0 +1,69 @@
+<div class="content">
+              	<dl class="dlbox photos"><dt><img src="picture/beauty.png">大数据千人千面</dt>
+		<dd style="background-color: darkred;" class="fanhao">
+		<?php 
+		//行为
+$string = mysqli_query($conn,'SELECT COUNT(1) as c,word from dashuju GROUP BY word desc ORDER BY c desc limit 0,5');
+				$rows1 =array();
+				while($row = mysqli_fetch_array($string))
+				{
+					$rows1[] =$row['word'];
+				}
+				
+				function myfunction($a,$b)
+				{
+				if ($a===$b)
+				  {
+				  return 0;
+				  }
+				  return ($a>$b)?1:-1;
+				}
+				//随机数据
+				$string2 = mysqli_query($conn,'SELECT * from fanhaoko');
+				$rows2 =array();
+				$map = array();
+				$ff =0;
+				while($row2 = mysqli_fetch_array($string2))
+				{
+					$a2 = explode("、",$row2['qie_c']);
+					$result=array_udiff($rows1,$a2,"myfunction");
+					//print_r($result);
+					$map[$ff]['id'] = $row2['id'];
+					$map[$ff]['key'] = count($result);
+					$ff= $ff+1;
+				}
+					//print_r($map);
+						foreach($map as $val){
+						$key_arrays[]=$val['key'];
+						}
+					array_multisort($key_arrays,SORT_ASC,SORT_NUMERIC,$map);
+					//var_dump($map);
+					//die();
+					$pdkf = 0; //计数器
+					foreach($map as $val4)
+					{
+						//echo $val4['id'];
+						if($pdkf<16){
+						$stringfd = mysqli_query($conn,'SELECT * from fanhaoko where id='.$val4['id']);	
+						$namerowj = mysqli_fetch_array($stringfd);
+						$selects = "select * from juqing where fanhao='".$namerowj['fanhao']."'";
+						$selectji1 = mysqli_query($conn,$selects);
+						$namerowj2 = mysqli_fetch_array($selectji1);	
+						
+					?>	<a href='<?php if($namerowj2['id']){echo 'http://www.jyht2.com/zuopin.php?words='.$namerowj2['fanhao'];}else{echo '#';}?>' target='_blank'><img class='lazy' src='<?php echo $namerowj['img']; ?>' /><span>发行:<?php echo $namerowj['faxing']; ?></span><br /><?php if($namerowj2['id']){echo $namerowj['fanhao'].'[剧]';}else{ echo $namerowj['fanhao']; }?></a>
+					<?php
+						$pdkf =$pdkf+1;
+						//echo $pdkf;
+						}
+					}
+				?>
+		
+		
+
+
+
+		</dd>
+	</dl>
+
+	<div class="push"></div>
+</div>

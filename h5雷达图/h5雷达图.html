@@ -1,0 +1,46 @@
+
+<!doctype html>
+<html lang="en">
+
+
+                                <!-- business Fans -->
+                                <ul class="comVal clear">
+                    <li>
+                        <dl>
+                            <dt><div>古力娜扎2021年07月商业价值</div></dt>
+                            <dd>形象价值：40.85</dd>
+                            <dd>传播价值：40.42</dd>
+                            <dd>商业价值：49.34</dd>
+                            <dd>未来价值：60.19</dd>
+                        </dl>
+                    </li>
+                    <li class="comValShow">
+                        <canvas id="comCanvas" width="200" height="200"></canvas>
+                        <p class="comVal1" val="40.85">形象价值 <br/><span>40.85</span></p>
+                        <p class="comVal2" val="40.42">传播价值 <br/><span>40.42</span></p>
+                        <p class="comVal3" val="49.34">商业价值 <br/><span>49.34</span></p>
+                        <p class="comVal4" val="60.19">未来价值 <br/><span>60.19</span></p>
+                        <script>
+                            var comCanvas=document.getElementById('comCanvas');
+                            var comCtx=comCanvas.getContext('2d');
+                            var comImg=new Image();
+                            comImg.src='https://www.youxingku.com/starlibrary/images/comValCanvas.png';
+                            comImg.onload=function(){
+                                comCtx.drawImage(comImg,0,0);
+                                var comVal1=parseFloat("40.85"),//形象价值
+                                    comVal2=parseFloat("40.42"),//传播价值
+                                    comVal3=parseFloat("49.34"),//商业价值
+                                    comVal4=parseFloat("60.19");//未来价值
+                                comCtx.fillStyle  = 'rgba(216,116,118,.5)';
+                                comCtx.moveTo(100,100-comVal1);
+                                comCtx.lineTo(100+comVal2,100);
+                                comCtx.lineTo(100,100+comVal3);
+                                comCtx.lineTo(100-comVal4,100);
+                                comCtx.fill();
+                            };
+                        </script>
+                    </li>
+					</ul>
+                    
+
+</html>

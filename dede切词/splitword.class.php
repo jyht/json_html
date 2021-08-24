@@ -54,16 +54,16 @@ class SplitWord
     
     //附加词典
     var $addonDic = array();
-    var $addonDicFile = '1/data/words_addons.dic';
+    var $addonDicFile = 'data/words_addons.dic';
     
     //主词典 
     var $dicStr = '';
     var $mainDic = array();
     var $mainDicHand = FALSE;
     var $mainDicInfos = array();
-    var $mainDicFile = '1/data/base_dic_full.dic';
+    var $mainDicFile = 'data/base_dic_full.dic';
     //是否直接载入词典（选是载入速度较慢，但解析较快；选否载入较快，但解析较慢，需要时才会载入特定的词条）
-    var $mainDicFileZip = '1/data/base_dic_full.zip';
+    var $mainDicFileZip = 'data/base_dic_full.zip';
     var $isLoadAll = true;
     var $isUnpacked = FALSE;
     
